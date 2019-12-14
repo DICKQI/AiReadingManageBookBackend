@@ -1,0 +1,9 @@
+.idea
+static
+app/administrator/migrations
+app/book/migrations
+__pycache__
+venv
+db.sqlite3
+
+common_static
