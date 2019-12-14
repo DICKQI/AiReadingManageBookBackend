@@ -53,6 +53,12 @@ def model_to_dict(instance, fields=None, exclude=None, *args, **kwargs):
                     'name': category.name,
                     'id': category.id
                 }
+            if f.verbose_name == '创建人':
+                user = Administrator.objects.get(idCard=value)
+                value = {
+                    'name': user.name,
+                    'idCard': user.idCard
+                }
         if isinstance(f, DateTimeField):
             value = formatDatetime(value)
         data[f.name] = value
