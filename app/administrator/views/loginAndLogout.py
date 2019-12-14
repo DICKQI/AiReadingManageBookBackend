@@ -1,6 +1,6 @@
 from app.administrator.models import Administrator
 from rest_framework.views import APIView
-from common.CommonFunc import check_login
+from common.CommonFunc import check_login, model_to_dict
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 import json
@@ -11,13 +11,15 @@ class BaseInfoView(APIView):
     @check_login
     def get(self, request):
         """
-        检查是否
+        获取用户信息
         :param request:
         :return:
         """
+        user = Administrator.objects.get(idCard=request.session.get('login'))
+        result = model_to_dict(user, exclude=['password', 'is_cancel'])
         return JsonResponse({
             'status': True,
-            'idCard': request.session.get('login')
+            'user': result
         })
 
     def post(self, request):
