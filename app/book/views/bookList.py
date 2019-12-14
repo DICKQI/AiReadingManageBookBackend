@@ -16,7 +16,8 @@ class BookListInfo(APIView):
         book = Book.objects.all()
         result = [model_to_dict(b) for b in book]
         for bo in result:
-            bo['content'] = bo['content'][:30] # 显示前30个字节
+            if len(bo['content']) >= 30:
+                bo['content'] = bo['content'][:30] + '....'  # 显示前30个字节
         return JsonResponse({
             'status': True,
             'book': result
