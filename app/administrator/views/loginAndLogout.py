@@ -8,6 +8,18 @@ import json
 
 class BaseInfoView(APIView):
 
+    @check_login
+    def get(self, request):
+        """
+        检查是否
+        :param request:
+        :return:
+        """
+        return JsonResponse({
+            'status': True,
+            'idCard': request.session.get('login')
+        })
+
     def post(self, request):
         """
         登录
