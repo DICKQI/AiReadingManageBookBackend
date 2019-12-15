@@ -96,6 +96,7 @@ class BookInfoView(APIView):
         :param isbn:
         :return:
         """
+        print(isbn)
         book = Book.objects.filter(ISBN=isbn)
         if not book.exists():
             return JsonResponse({
@@ -106,7 +107,7 @@ class BookInfoView(APIView):
         jsonParams = json.loads((request.body).decode('utf-8'))
         name = jsonParams.get('content', book.name)
         content = jsonParams.get('content', book.content)
-        category = Category.objects.get(jsonParams.get('category'), book.category.name)
+        category = Category.objects.get(name=jsonParams.get('category', book.category.name))
         book.name = name
         book.content = content
         book.category = category
