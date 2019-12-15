@@ -96,25 +96,30 @@ class BookInfoView(APIView):
         :param isbn:
         :return:
         """
-        print(isbn)
-        book = Book.objects.filter(ISBN=isbn)
-        if not book.exists():
+        try:
+            book = Book.objects.filter(ISBN=isbn)
+            if not book.exists():
+                return JsonResponse({
+                    'status': False,
+                    'errMsg': '该编号的图书不存在'
+                }, status=404)
+            book = book[0]
+            jsonParams = json.loads((request.body).decode('utf-8'))
+            name = jsonParams.get('content', book.name)
+            content = jsonParams.get('content', book.content)
+            category = Category.objects.get(name=jsonParams.get('category', book.category.name))
+            book.name = name
+            book.content = content
+            book.category = category
+            book.save()
+            bookDetail = model_to_dict(book)
+
+            return JsonResponse({
+                'status': True,
+                'book': bookDetail
+            })
+        except Exception as ex:
             return JsonResponse({
                 'status': False,
-                'errMsg': '该编号的图书不存在'
-            }, status=404)
-        book = book[0]
-        jsonParams = json.loads((request.body).decode('utf-8'))
-        name = jsonParams.get('content', book.name)
-        content = jsonParams.get('content', book.content)
-        category = Category.objects.get(name=jsonParams.get('category', book.category.name))
-        book.name = name
-        book.content = content
-        book.category = category
-        book.save()
-        bookDetail = model_to_dict(book)
-
-        return JsonResponse({
-            'status': True,
-            'book': bookDetail
-        })
+                'errMsg': '错误信息：' + str(ex)
+            })
