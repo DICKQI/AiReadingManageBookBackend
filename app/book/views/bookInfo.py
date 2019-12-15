@@ -19,6 +19,7 @@ class BookInfoView(APIView):
             jsonParams = json.loads((request.body).decode('utf-8'))
             name = jsonParams.get('name', '')
             ISBN = jsonParams.get('ISBN', '')
+            content = jsonParams.get('content', '')
             if Book.objects.filter(ISBN=ISBN).exists():
                 return JsonResponse({
                     'status': False,
@@ -29,6 +30,7 @@ class BookInfoView(APIView):
             newBook = Book.objects.create(
                 name=name,
                 ISBN=ISBN,
+                content=content,
                 category=category,
                 createUser=user
             )
