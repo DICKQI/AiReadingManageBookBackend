@@ -11,7 +11,7 @@ class CategorySearchBookView(APIView):
         """
         通过目录名来获取图书
         :param request:
-        :param category:
+        :param categoryID:
         :return:
         """
         categoryOBJ = Category.objects.filter(id=categoryID)
