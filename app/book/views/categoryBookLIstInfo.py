@@ -7,14 +7,14 @@ from common.CommonFunc import check_login, model_to_dict
 class CategorySearchBookView(APIView):
 
     @check_login
-    def get(self, request, category):
+    def get(self, request, categoryID):
         """
         通过目录名来获取图书
         :param request:
         :param category:
         :return:
         """
-        categoryOBJ = Category.objects.filter(name=category)
+        categoryOBJ = Category.objects.filter(id=categoryID)
         if not categoryOBJ.exists():
             return JsonResponse({
                 'status': False,
